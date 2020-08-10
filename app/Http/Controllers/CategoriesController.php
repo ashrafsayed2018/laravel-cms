@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Routing\RedirectController;
 
 class CategoriesController extends Controller
 {
@@ -14,7 +16,8 @@ class CategoriesController extends Controller
     public function index()
     {
        
-        return view("categories.index");
+        $Categories = Category::orderBy('id','desc')->get();
+        return view("categories.index")->with("categories",$Categories);
     }
 
     /**
@@ -36,7 +39,18 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validate the request 
+
+        $this->validate($request, [
+            "name" => ['required','unique:categories']
+        ]);
+
+        Category::create([
+            'name' => $request->name
+        ]);
+      session()->flash("success","Category $request->name Created Successfully .");
+        return redirect(route("categories.index"));
+       
     }
 
     /**
