@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use Illuminate\Http\Request;
 use Illuminate\Routing\RedirectController;
+use App\Http\Requests\CreateCategoryRequest;
 
 class CategoriesController extends Controller
 {
@@ -37,14 +38,9 @@ class CategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateCategoryRequest $request)
     {
-        // validate the request 
-
-        $this->validate($request, [
-            "name" => ['required','unique:categories']
-        ]);
-
+      
         Category::create([
             'name' => $request->name
         ]);
